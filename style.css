@@ -20,6 +20,8 @@ body {
     width: 100%;
     padding: 10px;
     background-color: #343A40;
+    border-radius: 10px;
+    box-shadow: 9px 10px 0px 0px rgba(128,125,128,1);
 }
 
 .joystick {
@@ -189,8 +191,6 @@ body {
     position: absolute;
 }
 
-
-
 .projectile {
     width: 10px;
     height: 10px;
@@ -211,4 +211,12 @@ body {
 
 .hidden {
     opacity: 0;
+}
+
+.button-start {
+    font-size: 25px;
+    background: #ff4d91;
+    border: 3px solid #fff;
+    border-radius: 5px;
+    padding: 10px;
 }
