@@ -1,6 +1,8 @@
 const player = document.getElementById('player');
 const enemyContainer = document.getElementById('enemies-container');
+const gameContainer = document.getElementById('game-container')
 const buttonStart = document.querySelector('.button-start');
+const button = [...document.querySelectorAll('.button')];
 const buttonLeft = document.querySelector('.button-left');
 const buttonRight = document.querySelector('.button-right');
 const buttonTop = document.querySelector('.button-top');
@@ -18,13 +20,13 @@ player.style.bottom = playerY + 'px';
 document.addEventListener('keydown', (e) => {
 
     if (!gameover) {
-        if ((e.key === 'ArrowUp' && playerY < window.innerHeight - player.offsetHeight)) {
+        if ((e.key === 'ArrowUp' && playerY < gameContainer.offsetHeight - player.offsetHeight)) {
             playerY += 10;
         } else if (e.key === 'ArrowDown' && playerY > 0) {
             playerY -= 10;
         } else if (e.key === 'ArrowLeft' && playerX > 0) {
             playerX -= 10;
-        } else if (e.key === 'ArrowRight' && playerX < window.innerWidth - player.offsetWidth) {
+        } else if (e.key === 'ArrowRight' && playerX < gameContainer.offsetWidth - player.offsetWidth) {
             playerX += 10;
         }
         player.style.left = playerX + 'px';
@@ -33,19 +35,33 @@ document.addEventListener('keydown', (e) => {
 });
 
 
-// const buttonLeft = document.querySelector('.button-left');
-// const buttonRight = document.querySelector('.button-right');
-// const buttonTop = document.querySelector('.button-top');
-// const buttonBottom = document.querySelector('.button-bottom');
-//
-// buttonTop.addEventListener('click', function () {
-//     buttonTop.classList.add('active');
-//
-//     if(!gameover && buttonTop.classList.contains('active')) {
-//         playerY += 10;
-//         buttonTop.classList.remove('active')
-//     }
-// })
+button.forEach((btn)=> {
+    btn.addEventListener('click', function (event){
+        event.preventDefault()
+
+        console.log(gameContainer)
+        if(!gameover) {
+            if (event.target.classList.contains('button-left') && playerX > 0) {
+                console.log('left')
+                playerX -= 10;
+            }
+            if (event.target.classList.contains('button-right') && playerX < gameContainer.offsetWidth - player.offsetWidth) {
+                console.log('right')
+                playerX += 10;
+            }
+            if (event.target.classList.contains('button-top') && playerY < gameContainer.offsetHeight - player.offsetHeight) {
+                console.log('top')
+                playerY += 10;
+            }
+            if (event.target.classList.contains('button-bottom') && playerY > 0) {
+                console.log('down')
+                playerY -= 10;
+            }
+            player.style.left = playerX + 'px';
+            player.style.bottom = playerY + 'px';
+        }
+    })
+})
 
 
 function getRandomInt(max) {
