@@ -2,17 +2,14 @@ const player = document.getElementById('player');
 const enemyContainer = document.getElementById('enemies-container');
 const gameContainer = document.getElementById('game-container')
 const buttonStart = document.querySelector('.button-start');
-const button = [...document.querySelectorAll('.button')];
-const buttonLeft = document.querySelector('.button-left');
-const buttonRight = document.querySelector('.button-right');
-const buttonTop = document.querySelector('.button-top');
-const buttonBottom = document.querySelector('.button-bottom');
+const buttons = [...document.querySelectorAll('.button')];
+
 let enemies = [];
 let gameover = false;
-
+let speed = 3;
 // Set initial player position
-let playerX = 0;
-let playerY = 0;
+let playerX = 240;
+let playerY = 30;
 player.style.left = playerX + 'px';
 player.style.bottom = playerY + 'px';
 
@@ -34,27 +31,21 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-
-button.forEach((btn)=> {
+buttons.forEach((btn)=> {
     btn.addEventListener('click', function (event){
         event.preventDefault()
 
-        console.log(gameContainer)
         if(!gameover) {
             if (event.target.classList.contains('button-left') && playerX > 0) {
-                console.log('left')
                 playerX -= 10;
             }
             if (event.target.classList.contains('button-right') && playerX < gameContainer.offsetWidth - player.offsetWidth) {
-                console.log('right')
                 playerX += 10;
             }
             if (event.target.classList.contains('button-top') && playerY < gameContainer.offsetHeight - player.offsetHeight) {
-                console.log('top')
                 playerY += 10;
             }
             if (event.target.classList.contains('button-bottom') && playerY > 0) {
-                console.log('down')
                 playerY -= 10;
             }
             player.style.left = playerX + 'px';
@@ -62,7 +53,6 @@ button.forEach((btn)=> {
         }
     })
 })
-
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -72,11 +62,12 @@ function createEnemy() {
     if (enemies.length < 9) { // Limit enemies to 5
         const enemy = document.createElement('div');
         enemy.className = `enemy-${getRandomInt(9)}`;
-        enemy.style.left = Math.random() * (window.innerWidth - 50) + 'px'; // Random X position
+        enemy.style.left = Math.random() * (gameContainer.offsetWidth - 50) + 'px'; // Random X position
         enemy.style.top = '0px'; // Start from top
         enemyContainer.appendChild(enemy);
         enemies.push(enemy);
     }
+
 }
 
 // Function to move enemies
@@ -84,26 +75,29 @@ function moveEnemies() {
     for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
         const top = parseInt(enemy.style.top);
-        enemy.style.top = (top + 2) + 'px'; // Move enemy downwards
 
+        enemy.style.top = (top + speed) + 'px'; // Move enemy downwards
         // Check if enemy hits the player
         const enemyRect = enemy.getBoundingClientRect();
         const playerRect = player.getBoundingClientRect();
         if (collisionDetection(enemyRect, playerRect)) {
             // Game over
-            if (gameover == false) {
+            if (gameover === false) {
                 alert('Game Over');
             }
             gameover = true;
             clearInterval(enemyInterval);
             clearInterval(projectileInterval);
         }
-
         // Remove enemy if it reaches the bottom of the scene
-        if (top > window.innerHeight) {
+        if (top > gameContainer.offsetHeight) {
             enemyContainer.removeChild(enemy);
             enemies.splice(i, 1);
         }
+
+
+
+        console.log(speed)
     }
 }
 
@@ -115,14 +109,12 @@ function collisionDetection(rect1, rect2) {
         rect1.top > rect2.bottom);
 }
 
-// Set intervals for moving projectiles and enemies
-// const projectileInterval = setInterval(moveProjectiles, 10);
-// const enemyInterval = setInterval(createEnemy, 1000);
-// setInterval(moveEnemies, 30);
-
 
 buttonStart.addEventListener('click',  () => {
-    // const projectileInterval = setInterval(moveProjectiles, 10);
-    const enemyInterval = setInterval(createEnemy, 1000);
+    setInterval(createEnemy, 1000);
     setInterval(moveEnemies, 30);
+    setInterval(()=>{
+        ++speed
+    }, (15000))
 })
+
