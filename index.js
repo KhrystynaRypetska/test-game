@@ -113,6 +113,7 @@ function collisionDetection(rect1, rect2) {
 buttonStart.addEventListener('click',  () => {
     setInterval(createEnemy, 1000);
     setInterval(moveEnemies, 30);
+    
     setInterval(()=>{
         ++speed
     }, (15000))
